@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Page marrante 🌈😂</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#ffdfd3; --bg2:#ffd6e0; --accent:#ff5c8a; --muted:#4b4b4b;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:'Baloo 2',system-ui,Arial;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--muted)}
+
+    .stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
+    .card{
+      width:min(960px,94%);
+      background:linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.8));
+      border-radius:24px;padding:28px;box-shadow:0 10px 40px rgba(0,0,0,0.08);position:relative;overflow:hidden;
+      border:3px dashed rgba(255,92,138,0.12);
+    }
+
+    /* Titre rigolo */
+    h1{margin:0;font-size:clamp(26px,4vw,44px);letter-spacing:1px;display:flex;align-items:center;gap:14px}
+    .emoji{font-size:1.2em;transform-origin:center;display:inline-block;animation:wiggle 2s infinite}
+    @keyframes wiggle{0%{transform:rotate(-12deg)}50%{transform:rotate(12deg)}100%{transform:rotate(-12deg)}}
+
+    p.lead{margin:10px 0 22px;font-size:1.05rem;opacity:0.9}
+
+    /* Zone blague */
+    .joke-area{display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+    .joke-box{flex:1 1 420px;background:linear-gradient(180deg,#fff,#fffefc);padding:18px;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,0.06);}
+    .joke-text{min-height:72px;font-size:1.1rem}
+
+    .controls{display:flex;gap:10px;margin-top:12px}
+    button{background:var(--accent);border:0;color:white;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(255,92,138,0.2)}
+    button.secondary{background:transparent;color:var(--accent);border:2px solid rgba(255,92,138,0.12)}
+
+    /* Bulles qui flottent */
+    .floaties{position:absolute;inset:0;pointer-events:none}
+    .bubble{position:absolute;will-change:transform,opacity;opacity:0.9}
+    .bubble--1{left:6%;top:72%;font-size:44px;animation:float 8s infinite ease-in-out}
+    .bubble--2{left:84%;top:20%;font-size:48px;animation:float 6s infinite ease-in-out reverse}
+    .bubble--3{left:50%;top:-6%;font-size:34px;animation:float 9s infinite ease-in-out}
+    @keyframes float{0%{transform:translateY(0) scale(0.95)}50%{transform:translateY(-28px) scale(1.05)}100%{transform:translateY(0) scale(0.95)}}
+
+    /* Confetti CSS - simple */
+    .confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+    .c{position:absolute;top:0;left:50%;width:10px;height:18px;opacity:0.95;border-radius:3px;transform-origin:center;animation:fall linear infinite}
+    .c:nth-child(1){left:10%;background:#ff5c8a;animation-duration:6s;animation-delay:0s}
+    .c:nth-child(2){left:20%;background:#ffd166;animation-duration:5.4s;animation-delay:.2s}
+    .c:nth-child(3){left:30%;background:#8bd3dd;animation-duration:5.8s;animation-delay:.4s}
+    .c:nth-child(4){left:40%;background:#c78bff;animation-duration:6.3s;animation-delay:.6s}
+    .c:nth-child(5){left:50%;background:#6bd96b;animation-duration:5.1s;animation-delay:.8s}
+    .c:nth-child(6){left:60%;background:#ffb3c7;animation-duration:6.6s;animation-delay:1s}
+    .c:nth-child(7){left:70%;background:#ffd166;animation-duration:5.9s;animation-delay:1.2s}
+    .c:nth-child(8){left:80%;background:#8bd3dd;animation-duration:6.2s;animation-delay:1.4s}
+    .c:nth-child(9){left:90%;background:#c78bff;animation-duration:5.7s;animation-delay:1.6s}
+    @keyframes fall{0%{transform:translateY(-120%) rotate(0)}100%{transform:translateY(120vh) rotate(540deg);opacity:1}}
+
+    /* footer */
+    footer{margin-top:16px;font-size:0.9rem;color:rgba(75,75,75,0.65);display:flex;justify-content:space-between;align-items:center}
+
+    /* responsive */
+    @media (max-width:560px){.joke-area{flex-direction:column}.card{padding:18px}}
+  </style>
+</head>
+<body>
+  <main class="stage">
+    <section class="card">
+      <h1><span class="emoji">🤣</span> La page vraiment marrante</h1>
+      <p class="lead">Une petite page pour rigoler — appuie sur le bouton, choisis ton niveau de rigolade, et admire le confetti.</p>
+
+      <div class="joke-area">
+        <div class="joke-box">
+          <div id="joke" class="joke-text">Clique sur <strong>Prochaine blague</strong> pour démarrer la machine à rire.</div>
+
+          <div class="controls">
+            <button id="next">Prochaine blague</button>
+            <button id="surprise" class="secondary">Niveau: Surprise</button>
+            <button id="loud" class="secondary">Niveau: Fort</button>
+          </div>
+        </div>
+
+        <div class="joke-box" aria-hidden="true">
+          <h3 style="margin-top:0">Spectacle visuel</h3>
+          <p>Confetti + emoji dansant + bulles = cocktail validé. (Ne pas boire.)</p>
+          <div style="margin-top:10px;font-size:40px;text-align:center">🎉 <span style="display:inline-block;animation:pop 1s infinite">🥳</span> 🎈</div>
+        </div>
+      </div>
+
+      <footer>
+        <small>Fait avec amour, humour et un peu de CSS.</small>
+        <small id="counter">Blagues lues: 0</small>
+      </footer>
+
+      <!-- éléments flottants -->
+      <div class="floaties" aria-hidden="true">
+        <div class="bubble bubble--1">💬</div>
+        <div class="bubble bubble--2">✨</div>
+        <div class="bubble bubble--3">🙃</div>
+      </div>
+
+      <!-- confetti -->
+      <div class="confetti" aria-hidden="true">
+        <span class="c"></span><span class="c"></span><span class="c"></span><span class="c"></span><span class="c"></span><span class="c"></span><span class="c"></span><span class="c"></span><span class="c"></span>
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    // Quelques blagues courtes (fr)
+    const jokes = [
+      "Pourquoi les livres détestent-ils l'été ? Parce qu'ils prennent un coup de soleil sur la page !",
+      "Que dit une imprimante en colère ? J'en ai ras-le-cartouche.",
+      "Pourquoi les plongeurs plongent-ils toujours en arrière et jamais en avant ? Parce que sinon ils tombent dans le bateau.",
+      "Quel est le comble pour un électricien ? De ne pas être au courant.",
+      "Je voulais écrire un livre sur le reverse engineering... mais j'ai commencé par démonter ma cafetière.",
+      "Blague bonus: Tape sur Surprise... et vois ce qui arrive !"
+    ];
+
+    let index = 0; let read = 0;
+    const jokeEl = document.getElementById('joke');
+    const nextBtn = document.getElementById('next');
+    const surpriseBtn = document.getElementById('surprise');
+    const loudBtn = document.getElementById('loud');
+    const counter = document.getElementById('counter');
+
+    function showJoke(i){
+      jokeEl.textContent = jokes[i%jokes.length];
+      index = i+1;
+      read++;
+      counter.textContent = 'Blagues lues: '+read;
+      // petit effet: clignoter titre emoji
+      document.querySelector('.emoji').style.transform = 'rotate(0deg)';
+      setTimeout(()=>document.querySelector('.emoji').style.transform = 'rotate(12deg)', 120);
+    }
+
+    nextBtn.addEventListener('click', ()=> showJoke(index));
+
+    surpriseBtn.addEventListener('click', ()=>{
+      // montre une blague aléatoire + lance un petit feu d'artifice visuel
+      showJoke(Math.floor(Math.random()*jokes.length));
+      popConfetti(12);
+    });
+
+    loudBtn.addEventListener('click', ()=>{
+      // niveau fort: ajoute un emoji supplémentaire et change la couleur du fond pour 1.6s
+      document.body.style.transition='background 0.3s';
+      document.body.style.background='linear-gradient(135deg,#fff7a8,#ffd6e0)';
+      showJoke(index+1);
+      setTimeout(()=>document.body.style.background='linear-gradient(135deg,var(--bg1),var(--bg2))',1600);
+      popConfetti(20);
+    });
+
+    function popConfetti(n){
+      // crée des confettis temporaires (JS) qui tombent
+      const container = document.querySelector('.confetti');
+      for(let i=0;i<n;i++){
+        const s = document.createElement('span');
+        s.className='c';
+        s.style.left = Math.random()*100 + '%';
+        s.style.background = ['#ff5c8a','#ffd166','#8bd3dd','#c78bff','#6bd96b'][Math.floor(Math.random()*5)];
+        s.style.width = (6+Math.random()*12)+'px';
+        s.style.height = (8+Math.random()*18)+'px';
+        s.style.top = '-20px';
+        s.style.opacity = 0.95;
+        s.style.animationDuration = (4+Math.random()*3)+'s';
+        container.appendChild(s);
+        // nettoyage
+        setTimeout(()=>{ s.remove(); }, 5000);
+      }
+    }
+
+    // démarrage doux
+    setTimeout(()=>{
+      document.querySelector('.card').style.transform='translateY(-4px)';
+    },400);
+  </script>
+</body>
+</html>
