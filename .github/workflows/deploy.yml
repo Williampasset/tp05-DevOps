@@ -3,7 +3,8 @@ name: Deploy to Coolify
 on:
   push:
     branches:
-      - main 
+      - main
+      - develop
 jobs:
   deploy:
     runs-on: ubuntu-latest
