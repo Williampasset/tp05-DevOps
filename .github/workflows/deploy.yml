@@ -1,20 +1,26 @@
 name: Deploy to Coolify
 
 on:
+  workflow_dispatch:  
   push:
     branches:
+      - develop  
       - main
-      - develop
+
 jobs:
   deploy:
+    name: Trigger Coolify Deployment
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    needs: build-docker-image  
 
-      - name: Deploy to Coolify
-        uses: cool-dev-team/coolify-deployment-action@v1
-        with:
-          api-key: ${{ secrets.COOLIFY_API_KEY }}
-          url: ${{ secrets.COOLIFY_URL }}
-          resource-id: ${{ secrets.COOLIFY_RESOURCE_ID }}
+    steps:
+      - name: Triggering Coolify deployment
+        env:
+          COOLIFY_WEBHOOK: ${{ secrets.COOLIFY_WEBHOOK }}
+          TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+        run: |
+          echo "Triggering Coolify deployment..."
+          curl --location --request POST "$COOLIFY_WEBHOOK" \
+            --header "Authorization: Bearer $TOKEN" \
+            --header "Content-Type: application/json" \
+            --data '{}'
