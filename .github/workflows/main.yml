@@ -1,41 +1,38 @@
-name: CI/CD - Deploy Nginx to Colify (GHCR)
+name: Github Actions CI - Build
 
 on:
   push:
-    branches:
+   branches:
       - main
-  workflow_dispatch:
+      - develop
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-
+    services:
+      docker:
+        image: docker:dind
+    
+    permissions:
+      contents: read
+      packages: write 
+    
+    env:
+      REPOSITORY_NAME: "ghcr.io/williampasset/tp05-devops"
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build Docker image
-        run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/nginx-colify:latest
-          docker build -t $IMAGE_NAME .
-          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
-
-      - name: Push Docker image
-        run: docker push $IMAGE_NAME
-
-      - name: Deploy to Colify
-        run: |
-          curl -X POST https://api.colify.cloud/v1/deploy \
-            -H "Authorization: Bearer ${{ secrets.COLIFY_API_KEY }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "service_name": "nginx-static",
-              "image": "'"$IMAGE_NAME"'"
-            }'
+    - name: Checkout source code
+      uses: actions/checkout@v4
+    - name: Login to container registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Build Docker Image
+      uses: docker/build-push-action@v5
+      with:
+        push: true
+        tags: |
+          ${{ env.REPOSITORY_NAME }}:${{ github.sha }}
+          ${{ env.REPOSITORY_NAME }}:latest
