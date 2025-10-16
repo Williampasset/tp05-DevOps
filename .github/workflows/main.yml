@@ -39,7 +39,7 @@ jobs:
 
   deploy:
     name: Trigger Coolify Deployment
-    runs-on: ubuntu-latest$
+    runs-on: ubuntu-latest
     needs: build
 
     steps:
