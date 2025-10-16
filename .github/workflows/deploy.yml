@@ -10,7 +10,7 @@ jobs:
   deploy:
     name: Trigger Coolify Deployment
     runs-on: ubuntu-latest
-    needs: build-docker-image  
+    needs: build  
 
     steps:
       - name: Triggering Coolify deployment
