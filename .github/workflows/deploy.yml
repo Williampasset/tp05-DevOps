@@ -1,0 +1,19 @@
+name: Deploy to Coolify
+
+on:
+  push:
+    branches:
+      - main 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Coolify
+        uses: cool-dev-team/coolify-deployment-action@v1
+        with:
+          api-key: ${{ secrets.COOLIFY_API_KEY }}
+          url: ${{ secrets.COOLIFY_URL }}
+          resource-id: ${{ secrets.COOLIFY_RESOURCE_ID }}
